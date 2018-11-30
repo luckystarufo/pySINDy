@@ -1,0 +1,7 @@
+*.[oa]
+*~
+.idea
+.DS_Store
+*.nc
+*.mat
+*.csv
