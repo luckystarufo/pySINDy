@@ -1,6 +1,6 @@
 from unittest import TestCase
-from pySINDy.sindy import SINDy
-from pySINDy.utils import generator
+from ..sindy import SINDy
+from ..utils import generator
 import numpy as np
 
 

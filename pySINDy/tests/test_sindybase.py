@@ -1,5 +1,5 @@
 from unittest import TestCase
-from pySINDy.sindybase import SINDyBase
+from ..sindybase import SINDyBase
 import numpy as np
 
 
