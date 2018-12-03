@@ -233,11 +233,12 @@ class SINDyBase(object):
             return all_exponents
 
     @staticmethod
-    def polynomial_expansion(data, degree=1, remove_zero_order=False):
+    def polynomial_expansion(data, degree=1, remove_zero_order=False, var_names=None):
         """
         :param data: a 2D numpy array of original features stored in each column
         :param degree: degree of polynomials of features to be expanded
         :param remove_zero_order: boolean value, indicate whether to remove the zero order term
+        :param var_names: variable names, default as None
         :return: a tensor consists of extended features, and corresponding descriptions
         """
         if len(data.shape) == 1:
@@ -252,7 +253,7 @@ class SINDyBase(object):
                                    axis=0) for e in exponents]).T
 
         # descriptions of each extended feature
-        desp = SINDyBase.exponent_to_description(exponents, 'sup', remove_zero_order)
+        desp = SINDyBase.exponent_to_description(exponents, 'sup', remove_zero_order, var_names=var_names)
 
         return result, desp
 
@@ -268,13 +269,15 @@ class SINDyBase(object):
         :return: coefficients of fit
         """
         if len(b.shape) == 1:
-            b = b[np.newaxis, ]
+            b = b[:, np.newaxis]
         dim = b.shape[-1]
 
         # normalize each column of mtx
         if normalize != 0:
-            col_norms = np.linalg.norm(mtx, ord=normalize, axis=0)
-            mtx = mtx / col_norms[np.newaxis, :]
+            w_col_norms = np.linalg.norm(mtx, ord=normalize, axis=0)
+            b_col_norms = np.linalg.norm(b, ord=normalize, axis=0)
+            mtx = mtx / w_col_norms[np.newaxis, :]
+            b = b / b_col_norms[np.newaxis, :]
 
         w = np.linalg.lstsq(mtx, b, rcond=None)[0]
         for _ in np.arange(max_iter):
@@ -288,12 +291,14 @@ class SINDyBase(object):
                 break
 
         if normalize != 0:
-            w = w * col_norms[:, np.newaxis]
+            w = w * w_col_norms[:, np.newaxis]
+            w = w / b_col_norms[np.newaxis, :]
 
         return w
 
     @staticmethod
-    def sparsify_dynamics(mtx, b, init_tol, max_iter=25, thresh_iter=10, l0_penalty=None, split=0.8):
+    def sparsify_dynamics(mtx, b, init_tol, max_iter=25, thresh_iter=10,
+                          l0_penalty=None, split=0.8, normalize=0):
         """
         :param mtx: the theta matrix of shape (M, N)
         :param b: a vector or an array of shape (M,) or (M, K)
@@ -302,6 +307,7 @@ class SINDyBase(object):
         :param thresh_iter: maximum iteration for threshold least squares
         :param l0_penalty: penalty factor for nonzero coefficients
         :param split: proportion of the training set
+        :param normalize: normalization methods, default as 0 (no normalization)
         :return: the best coefficients of fit
         """
         if mtx.ndim != 2:
@@ -322,7 +328,8 @@ class SINDyBase(object):
         test_b = b[test, :]
         # set up initial tolerance, l0 penalty, best error, etc.
         if l0_penalty is None:
-            l0_penalty = 0.001*np.linalg.cond(mtx)
+            # l0_penalty = 0.001*np.linalg.cond(mtx)
+            l0_penalty = np.linalg.norm(test_b) / len(test)
 
         tol = d_tol = float(init_tol)
 
@@ -331,10 +338,9 @@ class SINDyBase(object):
         err_best = np.linalg.norm(test_b - test_mtx.dot(w_best), 2) + l0_penalty*np.count_nonzero(w_best)
         tol_best = 0.
         imp_flag = True
-        for _ in np.arange(max_iter):
-            w = SINDyBase.threshold_ls(train_mtx, train_b, tol, thresh_iter)
+        for i in np.arange(max_iter):
+            w = SINDyBase.threshold_ls(train_mtx, train_b, tol, thresh_iter, normalize)
             err = np.linalg.norm(test_b - test_mtx.dot(w), 2) + l0_penalty*np.count_nonzero(w)
-
             if err < err_best:
                 err_best = err
                 w_best = w
@@ -342,8 +348,11 @@ class SINDyBase(object):
                 tol += d_tol
                 imp_flag = False
             else:
-                tol -= d_tol
-                d_tol /= 2
+                # tol = max([0, tol - d_tol])
+                tol = max([0, tol - 2*d_tol])
+                # d_tol /= 2
+                d_tol = 2 * d_tol/(max_iter - i)
+                tol = tol + d_tol
 
         if imp_flag:
             print('cutoff value maybe too small/large to threshold ....')
@@ -351,12 +360,13 @@ class SINDyBase(object):
         return w_best, tol_best
 
     @staticmethod
-    def exponent_to_description(exponents, typ='sup', remove_zero_order=False, as_dict=False):
+    def exponent_to_description(exponents, typ='sup', remove_zero_order=False, as_dict=False, var_names=None):
         """
         :param exponents: a 2D numpy array of exponents
         :param typ: a string, can be either 'sup' (superscript) or 'sub' (subscript)
         :param remove_zero_order: boolean value, indicate whether to remove the zero order term
         :param as_dict: whether to include exponents in the descriptions as a dict
+        :param var_names: variable name, default to be None
         :return: a list or a dict (depends on 'as_dict') of descriptions of corresponding exponents
         """
         if not isinstance(exponents, np.ndarray) or exponents.ndim != 2:
@@ -367,15 +377,21 @@ class SINDyBase(object):
         m, n = exponents.shape
 
         if typ == 'sup':
+            if var_names is not None:
+                assert isinstance(var_names, list), "var_names must be a list of strings when typ =='sup'!"
+                assert len(var_names) == n, "length of var_names doesn't match with exponents!"
+            else:
+                var_names = ['u%d' % i for i in np.arange(n)]
+
             for i in np.arange(m):
                 if np.any(exponents[i, :]):
                     # exist nonzero element
                     key = ''
                     for j in np.arange(n):
                         if exponents[i, j] == 1:
-                            key += 'u%d' % j
+                            key += var_names[j]
                         elif exponents[i, j]:
-                            key += 'u%d^{%d}' % (j, exponents[i, j])
+                            key += (var_names[j] + '^{%d}' % exponents[i, j])
 
                     desp.append(key)
                     desp_dict[key] = exponents[i, :].tolist()
@@ -388,6 +404,11 @@ class SINDyBase(object):
         elif typ == 'sub':
             # name of each dimension
             # (with xyz coordinates as default except for higher dimensional cases)
+            if var_names is not None:
+                assert isinstance(var_names, str), "var_names must be of type str when typ == 'sub'!"
+            else:
+                var_names = 'u'
+
             if n == 1:
                 dim_strs = ['x']
             elif n == 2:
@@ -400,7 +421,7 @@ class SINDyBase(object):
             for i in np.arange(m):
                 if np.any(exponents[i, :]):
                     # exist nonzero element
-                    key = 'u_{'
+                    key = (var_names + '_{')
                     for j in np.arange(n):
                         key += dim_strs[j]*exponents[i, j]
                     key += '}'

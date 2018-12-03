@@ -9,9 +9,9 @@ clear all; close all; clc
 %  ome(A) = -beta*A^2
 
 
-t=0:0.05:10;
+t=0:0.01:5;
 d1=0.1; d2=0.1; beta=1.0;
-L=20; n=512; N=n*n;
+L=10; n=512; N=n*n;
 x2=linspace(-L/2,L/2,n+1); x=x2(1:n); y=x;
 kx=(2*pi/L)*[0:(n/2-1) -n/2:-1]; ky=kx;
 
@@ -44,10 +44,10 @@ figure(1)
 pcolor(x,y,v(:,:,j+1)); shading interp; colormap(hot); colorbar; drawnow; 
 end
 
-save('reaction_diffusion_big.mat','t','x','y','u','v')
+save('reaction_diffusion.mat','t','x','y','u','v')
 
 %%
-load reaction_diffusion_big
+load reaction_diffusion
 pcolor(x,y,u(:,:,end)); shading interp; colormap(hot)
 
 

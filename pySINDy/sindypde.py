@@ -12,138 +12,108 @@ class SINDyPDE(SINDyBase):
     reference: http://advances.sciencemag.org/content/3/4/e1602614/tab-pdf
     """
     def fit(self, data, dt, dx, poly_degree=2, space_deriv_order=2,
-            cut_off=1e-3, deriv_acc=2):
+            cut_off=1e-3, deriv_acc=2, sample_rate=1.):
         """
-        :param data: dynamics data to be processed
+        :param data: a numpy array or a dict of arrays, dynamics data to be processed
         :param dt: float, for temporal grid spacing
-        :param dx: float, for spatial grid spacing
+        :param dx: float or list of floats, for spatial grid spacing
         :param poly_degree: degree of polynomials to be included in theta matrix (all derivatives remain degree 1)
         :param space_deriv_order: maximum order of derivatives applied on spatial dimensions
         :param cut_off: the threshold cutoff value for sparsity
         :param deriv_acc: (positive) integer, derivative accuracy
+        :param sample_rate: float, proportion of the data to use
         :return: a SINDyPDE model
         """
-        if len(data.shape) not in [2, 3, 4]:
-            raise ValueError('SINDyPDE supports 2D, 3D and 4D datasets only, '
-                             'with the last dimension be the time dimension.')
+        if isinstance(data, np.ndarray):
+            data = {'u': data}
+
+        array_shape = data[list(data.keys())[0]].shape
+
+        for i, k in enumerate(data.keys()):
+            if len(data[k].shape) not in [2, 3, 4]:
+                raise ValueError("SINDyPDE supports 2D, 3D and 4D arrays only, "
+                                 "with the last dimension be the time dimension.")
+            if data[k].shape != array_shape:
+                raise ValueError("The arrays that you provide should have the same shapes!")
+
+        if not isinstance(dt, float):
+            raise ValueError("dt should of type float, specifying the temporal grids ...")
+
+        if isinstance(dx, list):
+            if len(dx) != len(array_shape) - 1:
+                raise ValueError("The length of dx does not match the shape of the array!")
+        elif isinstance(dx, float):
+            dx = [dx] * (len(array_shape) - 1)
+        else:
+            raise ValueError("dx could either be float or a list of floats ...")
 
         # compute time derivative
-        d_dt = FinDiff(data.ndim-1, dt, 1, acc=deriv_acc)
-        time_deriv = d_dt(data)
+        d_dt = FinDiff(len(array_shape)-1, dt, 1, acc=deriv_acc)
+        time_deriv = np.zeros((np.prod(array_shape), len(data.keys())))
+        for i, k in enumerate(data.keys()):
+            time_deriv[:, i] = d_dt(data[k]).flatten()
         print("Progress: finished computing time derivatives  ...")
 
         # compute spatial derivatives
         if space_deriv_order < 1 or not isinstance(space_deriv_order, int):
             raise ValueError('Order of the spatial derivative should be a positive integer!')
 
-        space_deriv = self.compute_spatial_derivatives(data, dx, space_deriv_order)
-
-        '''
-        exponents = self.get_ordered_poly_exponents(data.ndim - 1, space_deriv_order)
-        spatial_deriv_desp_dict = self.exponent_to_description(exponents, 'sub', remove_zero_order=True, as_dict=True)
-        spatial_derivatives_dict = self.compute_spatial_derivatives(data, dx, spatial_deriv_desp_dict,
-                                                                    space_diff, width_x)
-        # organize the spatial derivatives as the same as in descriptions
-        spatial_derivatives = np.vstack([spatial_derivatives_dict[key].flatten() for key
-                                         in spatial_deriv_desp_dict.keys()]).T
+        space_deriv, space_deriv_desp = self.compute_spatial_derivatives(data, dx, space_deriv_order, deriv_acc)
         print("Progress: finished computing spatial derivatives  ...")
 
-        # adjust size of data to match with spatial derivatives
-        if space_diff == 'poly':
-            data = data[[slice(width_x, -width_x)]*(data.ndim-1)+[slice(None)]]
-
         # prepare the library
-        extended_data, extended_data_desp = self.polynomial_expansion(data.flatten(), degree=poly_degree)
-        lib, self._desp = self.product_expansion(extended_data, spatial_derivatives,
-                                                 extended_data_desp,
-                                                 list(spatial_deriv_desp_dict.keys()))
+        all_data, data_var_names = self.dict_to_2darray(data)
+        extended_data, extended_data_desp = self.polynomial_expansion(all_data, degree=poly_degree,
+                                                                      var_names=data_var_names)
+        lib, self._desp = self.product_expansion(extended_data, space_deriv, extended_data_desp,
+                                                 space_deriv_desp)
 
         # sparse regression
-        self._coef, _ = self.sparsify_dynamics(lib, x_dot.flatten(), cut_off)'''
+        if not isinstance(sample_rate, float) or sample_rate < 0 or sample_rate > 1:
+            raise ValueError("sample rate must be a float number between 0-1!")
+        idxs = np.random.choice(lib.shape[0], int(sample_rate*lib.shape[0]), replace=False)
+        self._coef, _ = self.sparsify_dynamics(lib[idxs, :], time_deriv[idxs, :], cut_off, normalize=0)
+        print("Progress: finished sparse regression  ...")
 
         return self
 
-    def compute_spatial_derivatives(self, data, dx, order):
+    def compute_spatial_derivatives(self, data, dx, order, acc):
         """
         Compute the spatial derivatives presented in descriptions with proposed method
-        :param data: value of state variables
-        :param dx: float, for spatial grid spacing
-        :param order: order of derivatives applied on spatial dimensions
-        :return: array of spatial derivatives together with its descriptions
+        :param data: a dict of arrays, value of state variables
+        :param dx: float or a list of floats, for spatial grid spacing
+        :param order: maximum order of derivatives applied on spatial dimensions
+        :param acc: accuracy of the derivatives
+        :return: a dict of arrays of spatial derivatives
         """
-        exponents = self.get_ordered_poly_exponents(data.ndim - 1, order)
-        deriv_desp_dict = self.exponent_to_description(exponents, 'sub',
-                                                       remove_zero_order=True,
-                                                       as_dict=True)
+        if isinstance(data, np.ndarray):
+            data = {'u': data}
 
-        spatial_derivatives = {}
-        max_order = 0
-        for key, value in deriv_desp_dict.items():
-            if np.any(value):
-                spatial_derivatives[key] = None
-                max_order = np.max([max_order, np.sum(value)])
+        if not isinstance(data, dict):
+            raise ValueError("data should be a numpy array or a dict of arrays!")
 
-        tmp_dict = {'root': [-1, max_order, data]}
-        queue = ['root']
+        if not isinstance(dx, float) and not isinstance(dx, list):
+            raise ValueError("dx should be float or a list of floats specifying the spatial grids!")
 
-        # BFS: reduce the derivative dependencies as much as possible
-        while len(queue):
-            old_key = queue.pop()
-            # compute all possible derivatives at current depth, if not a leaf
-            cur_depth = tmp_dict[old_key][0] + 1
-            if cur_depth < data.ndim - 1:
-                old_data = tmp_dict[old_key][2]
-                if diff_method == 'fd':
-                    for i in np.arange(tmp_dict[old_key][1]+1):
-                        new_key = old_key + '/%d' % i
-                        new_order = tmp_dict[old_key][1] - i
-                        if i:
-                            new_data = self.finite_difference(old_data, dx, dim=cur_depth, order=i)
-                            tmp_dict[new_key] = [cur_depth, new_order, new_data]
-                        else:
-                            tmp_dict[new_key] = [cur_depth, new_order, data]
+        array_shape = data[list(data.keys())[0]].shape
+        exponents = self.get_ordered_poly_exponents(len(array_shape) - 1, order)
+        space_deriv = []
+        space_deriv_desp = []
 
-                        queue = [new_key] + queue
+        for k in data.keys():
+            deriv_desp_dict = self.exponent_to_description(exponents, 'sub',
+                                                           remove_zero_order=True,
+                                                           as_dict=True, var_names=k)
 
-                elif diff_method == 'poly':
-                    xgrid = np.arange(old_data.shape[cur_depth])*dx
-                    order_list = [i for i in np.arange(1, tmp_dict[old_key][1]+1)]
-                    all_new_data = self.polynomial_difference(old_data, xgrid, dim=cur_depth,
-                                                                  order=order_list, degree=width)
-                    # add the original one
-                    if not isinstance(all_new_data, list):
-                        all_new_data = [data, all_new_data]
-                    else:
-                        all_new_data = [data] + all_new_data
+            cur_space_deriv = np.zeros((np.prod(array_shape), len(deriv_desp_dict.keys())))
+            for i, key in enumerate(deriv_desp_dict.keys()):
+                op = self.orders_to_op(deriv_desp_dict[key], dx, acc)
+                cur_space_deriv[:, i] = op(data[k]).flatten()
+                space_deriv_desp.append(key)
 
-                    for i in np.arange(tmp_dict[old_key][1]+1):
-                        new_key = old_key + '/%d' % i
-                        new_order = tmp_dict[old_key][1] - i
-                        tmp_dict[new_key] = [cur_depth, new_order, all_new_data[i]]
-                        queue = [new_key] + queue
+            space_deriv.append(cur_space_deriv)
 
-                else:
-                    raise ValueError("space_diff can be either 'df' (finite difference) "
-                                     "or 'poly'(polynomial interpolation) only!")
-
-            # trim the dimensions & write back to spatial_derivatives dict
-            mask_slice = slice(width, -width)
-            for key, value in spatial_derivatives.items():
-                dir_key = self.exponent_to_dir(deriv_desp_dict[key])
-                if diff_method == 'fd':
-                    idxs = [slice(None)]*data.ndim
-                elif diff_method == 'poly':
-                    conflicts = [True if x == y else False for idx, (x, y) in
-                                 enumerate(zip(data.shape, tmp_dict[dir_key][2].shape))]
-                    idxs = [mask_slice if x else slice(None) for x in conflicts]
-                    idxs[-1] = slice(None)  # we don't want to change time dimension
-                else:
-                    raise ValueError("space_diff can be either 'df' (finite difference) "
-                                     "or 'poly'(polynomial interpolation) only!")
-
-                spatial_derivatives[key] = tmp_dict[dir_key][2][idxs]
-
-            return spatial_derivatives
+        return np.hstack(space_deriv), space_deriv_desp
 
     @staticmethod
     def sampling_idxs(shape, space_sample_rate, time_sample_rate, acc_x=2, acc_t=2, major='row'):
@@ -246,15 +216,38 @@ class SINDyPDE(SINDyBase):
         return prod_feat, prod_desp
 
     @staticmethod
-    def exponent_to_dir(exponent):
+    def orders_to_op(order, dx, acc):
         """
-        :param exponent: a list of exponents
-        :return: a string of structured directories
-
-        Note: only used in compute_spatial_derivatives. eg. [1, 2, 0] --> "root/1/2/0"
+        :param order: orders of the derivative
+        :param dx: a float or a list of floats, grid spacings
+        :param acc: a positive integer, accuracy of the derivatives
+        :return:
         """
-        dir_key = 'root'
-        for i in np.arange(len(exponent)):
-            dir_key += '/%d' % exponent[i]
+        if not isinstance(order, list):
+            raise ValueError("order argument must be a list of positive integers!")
 
-        return dir_key
+        if isinstance(dx, list):
+            assert len(order) == len(dx), "length of order and dx are not the same!"
+        elif isinstance(dx, float):
+            dx = [dx] * len(order)
+        else:
+            raise ValueError("dx must be a float or a list of floats, "
+                             "specifying the grid spacing information!")
+
+        args = [(int(i), dx[i], order[i]) for i in np.arange(len(order)) if order[i] != 0]
+        return FinDiff(*args, acc=acc)
+
+    @staticmethod
+    def dict_to_2darray(data_dict):
+        """
+        This function flattens all the arrays in a dict and stack them together
+        :param data_dict: a dict of arrays
+        :return: a 2D numpy array and a list of descriptions
+        """
+        if not isinstance(data_dict, dict):
+            raise ValueError("data should be of dict type!")
+
+        desp = list(data_dict.keys())
+        data = [data_dict[k].flatten() for k in desp]
+
+        return np.vstack(data).T, desp
