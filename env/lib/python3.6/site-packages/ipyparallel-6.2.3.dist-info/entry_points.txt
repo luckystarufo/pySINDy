@@ -1,0 +1,5 @@
+[console_scripts]
+ipcluster = ipyparallel.apps.ipclusterapp:launch_new_instance
+ipcontroller = ipyparallel.apps.ipcontrollerapp:launch_new_instance
+ipengine = ipyparallel.apps.ipengineapp:launch_new_instance
+
