@@ -1,7 +1,9 @@
+# pylint: skip-file
+
 from unittest import TestCase
 from ..sindypde import SINDyPDE
-from ..utils import generator
 import numpy as np
+import warnings
 
 
 class TestSINDy(TestCase):

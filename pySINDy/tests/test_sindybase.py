@@ -1,6 +1,9 @@
+# pylint: skip-file
+
 from unittest import TestCase
 from ..sindybase import SINDyBase
 import numpy as np
+import warnings
 
 
 class TestSINDyBase(TestCase):
@@ -36,6 +39,7 @@ class TestSINDyBase(TestCase):
         np.testing.assert_allclose(fourth_order_derivative, expected_fourth_order)
 
     def test_finite_difference_dim(self):
+        warnings.simplefilter("ignore")
         model = SINDyBase()
         data = np.array([[1, 2, 3], [3, 4, 5], [5, 6, 7]])
         dx = 0.1
@@ -67,8 +71,8 @@ class TestSINDyBase(TestCase):
         np.testing.assert_allclose(first_deriv, expected_first)
         np.testing.assert_allclose(second_deriv, expected_second)
 
-
     def test_polynomial_difference_dim_2d(self):
+        warnings.simplefilter("ignore")
         model = SINDyBase()
         data = np.array([[1, 2, 3, 4, 5],
                          [3, 4, 5, 6, 7],
@@ -91,6 +95,7 @@ class TestSINDyBase(TestCase):
         np.testing.assert_allclose(np.squeeze(derivative_dim_last), np.squeeze(expected_dim1))
 
     def test_polynomial_difference_dim_3d(self):
+        warnings.simplefilter("ignore")
         model = SINDyBase()
         data = np.array([[[1, 2, 3, 4, 5], [3, 4, 5, 6, 7],
                           [5, 6, 7, 8, 9], [7, 8, 9, 10, 11], [9, 10, 11, 12, 13]],
@@ -123,6 +128,7 @@ class TestSINDyBase(TestCase):
         np.testing.assert_allclose(np.squeeze(derivative_dim2), np.squeeze(expected_dim2))
 
     def test_polynomial_difference_degree(self):
+        warnings.simplefilter("ignore")
         model = SINDyBase()
         data1d = np.random.rand(1, 10)
         data2d = np.random.rand(2, 30)

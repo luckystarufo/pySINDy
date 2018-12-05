@@ -89,9 +89,9 @@ later.
 
 ## Getting Started
 
-PySINDy requires numpy, scipy, matplotlib, findiff, pytest (for unittests), sphinx (for documentation). 
-The code is compatible with Python 3.5 and Python 3.6. It can be installed using pip or directly 
-from the source code.
+PySINDy requires numpy, scipy, matplotlib, findiff, pytest (for unittests), pylint (for PEP8 style check), 
+sphinx (for documentation). The code is compatible with Python 3.5 and Python 3.6. It can be installed 
+using pip or directly from the source code.
 
 ### Installing via pip
 
@@ -112,8 +112,8 @@ Then, to install the package just type:
 ```
 
 ## Usage
-**PySINDy** uses uses [Sphinx](http://www.sphinx-doc.org/en/stable/) for code documentation.
-So you can see more details about the code usage [here](https://pysindy.readthedocs.io/en/latest/).
+**PySINDy** uses [Sphinx](http://www.sphinx-doc.org/en/stable/) for code documentation.
+So you can see more details about the code usage [there](https://pysindy.readthedocs.io/en/latest/).
 
 ### Examples
 We will frequently update simple examples for demo purposes, and here are currently exisiting
@@ -133,7 +133,7 @@ To run tests locally, type:
 ```
 
 ## License
-This project utilizes the MIT [LICENSE](LICENSE).
+This project utilizes the [MIT LICENSE](LICENSE).
 100% open-source, feel free to utilize the code however you like. 
 
 ## Acknowledgments

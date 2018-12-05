@@ -39,11 +39,11 @@ class SINDyBase(object):
             self.__class__.__name__))
 
     @staticmethod
-    def finite_difference(data, dx, order=1, dim=0):
+    def finite_difference(data, _dx, order=1, dim=0):
         """
         Take derivative using 2nd order finite difference method
         :param data: a tensor to be differentiated
-        :param dx: grid spacing, assume to be uniform
+        :param _dx: grid spacing, assume to be uniform
         :param order: the order of the derivative to be applied
         :param dim: the dimension to be taken the derivative
         :return: a tensor after differentiation
@@ -53,79 +53,75 @@ class SINDyBase(object):
             raise ValueError('The selected dim should be less than #of dimensions of data!')
 
         data_shape = data.shape
-        n = data_shape[dim]
+        _n = data_shape[dim]
         idxs = [slice(None)]*len(data_shape)
         data_dx = np.zeros(data_shape)
 
         if order == 1:
 
-            for i in np.arange(1, n-1):
+            for i in np.arange(1, _n-1):
                 idxs[dim] = i
-                data_dx[idxs] = (np.take(data, i+1, dim) - np.take(data, i-1, dim))/(2*dx)
+                data_dx[idxs] = (np.take(data, i+1, dim) - np.take(data, i-1, dim))/(2*_dx)
 
             idxs[dim] = 0
             data_dx[idxs] = (-3.0/2*np.take(data, 0, dim) + 2*np.take(data, 1, dim) -
-                             np.take(data, 2, dim)/2)/dx
+                             np.take(data, 2, dim)/2)/_dx
 
-            idxs[dim] = n - 1
-            data_dx[idxs] = (3.0/2*np.take(data, n-1, dim) - 2*np.take(data, n-2, dim) +
-                             np.take(data, n-3, dim)/2)/dx
-
-            return data_dx
+            idxs[dim] = _n - 1
+            data_dx[idxs] = (3.0/2*np.take(data, _n-1, dim) - 2*np.take(data, _n-2, dim) +
+                             np.take(data, _n-3, dim)/2)/_dx
 
         elif order == 2:
 
-            for i in np.arange(1, n-1):
+            for i in np.arange(1, _n-1):
                 idxs[dim] = i
                 data_dx[idxs] = (np.take(data, i+1, dim) - 2*np.take(data, i, dim) +
-                                 np.take(data, i-1, dim))/dx**2
+                                 np.take(data, i-1, dim))/_dx**2
 
             idxs[dim] = 0
             data_dx[idxs] = (2*np.take(data, 0, dim) - 5*np.take(data, 1, dim) +
-                             4*np.take(data, 2, dim) - np.take(data, 3, dim))/dx**2
+                             4*np.take(data, 2, dim) - np.take(data, 3, dim))/_dx**2
 
-            idxs[dim] = n - 1
-            data_dx[idxs] = (2*np.take(data, n-1, dim) - 5*np.take(data, n-2, dim) +
-                             4*np.take(data, n-3, dim) - np.take(data, n-4, dim))/dx**2
-
-            return data_dx
+            idxs[dim] = _n - 1
+            data_dx[idxs] = (2*np.take(data, _n-1, dim) - 5*np.take(data, _n-2, dim) +
+                             4*np.take(data, _n-3, dim) - np.take(data, _n-4, dim))/_dx**2
 
         elif order == 3:
 
-            for i in np.arange(2, n-2):
+            for i in np.arange(2, _n-2):
                 idxs[dim] = i
                 data_dx[idxs] = (np.take(data, i+2, dim)/2 - np.take(data, i+1, dim) +
-                                 np.take(data, i-1, dim) - np.take(data, i-2, dim)/2)/dx**3
+                                 np.take(data, i-1, dim) - np.take(data, i-2, dim)/2)/_dx**3
 
             idxs[dim] = 0
             data_dx[idxs] = (-2.5*np.take(data, 0, dim) + 9*np.take(data, 1, dim) -
                              12*np.take(data, 2, dim) + 7*np.take(data, 3, dim) -
-                             1.5*np.take(data, 4, dim))/dx**3
+                             1.5*np.take(data, 4, dim))/_dx**3
 
             idxs[dim] = 1
             data_dx[idxs] = (-2.5*np.take(data, 1, dim) + 9*np.take(data, 2, dim) -
                              12*np.take(data, 3, dim) + 7*np.take(data, 4, dim) -
-                             1.5*np.take(data, 5, dim))/dx**3
+                             1.5*np.take(data, 5, dim))/_dx**3
 
-            idxs[dim] = n - 1
-            data_dx[idxs] = (2.5 * np.take(data, n-1, dim) - 9 * np.take(data, n-2, dim) +
-                             12 * np.take(data, n-3, dim) - 7 * np.take(data, n-4, dim) +
-                             1.5 * np.take(data, n-5, dim)) / dx ** 3
+            idxs[dim] = _n - 1
+            data_dx[idxs] = (2.5 * np.take(data, _n-1, dim) - 9 * np.take(data, _n-2, dim) +
+                             12 * np.take(data, _n-3, dim) - 7 * np.take(data, _n-4, dim) +
+                             1.5 * np.take(data, _n-5, dim)) /_dx**3
 
-            idxs[dim] = n - 2
-            data_dx[idxs] = (2.5*np.take(data, n-2, dim) - 9*np.take(data, n-3, dim) +
-                             12*np.take(data, n-4, dim) - 7*np.take(data, n-5, dim) +
-                             1.5*np.take(data, n-6, dim))/dx**3
-
-            return data_dx
+            idxs[dim] = _n - 2
+            data_dx[idxs] = (2.5*np.take(data, _n-2, dim) - 9*np.take(data, _n-3, dim) +
+                             12*np.take(data, _n-4, dim) - 7*np.take(data, _n-5, dim) +
+                             1.5*np.take(data, _n-6, dim))/_dx**3
 
         elif order > 3:
 
-            return SINDyBase.finite_difference(SINDyBase.finite_difference(data, dx, 3, dim),
-                                               dx, order-3, dim)
+            return SINDyBase.finite_difference(SINDyBase.finite_difference(data, _dx, 3, dim),
+                                               _dx, order-3, dim)
 
         else:
             raise ValueError('order of the derivative should be a positive integer!')
+
+        return data_dx
 
     @staticmethod
     def pointwise_polynomial_difference(data, xgrid, order=1, degree=2, index=None):
@@ -141,9 +137,9 @@ class SINDyBase(object):
             order = [order]
 
         data = data.flatten()
-        n = len(data)
+        _n = len(data)
         if index is None:
-            index = int((n - 1)/2)
+            index = int((_n - 1)/2)
 
         # Fit to a Chebyshev polynomial
         poly = np.polynomial.chebyshev.Chebyshev.fit(xgrid, data, degree)
@@ -170,7 +166,7 @@ class SINDyBase(object):
             order = [order]
 
         data_shape = data.shape
-        n = data_shape[dim]
+        _n = data_shape[dim]
         idxs = [slice(None)]*len(data_shape)
         new_data_shape = list(data_shape)
         data_slice_shape = list(data_shape)
@@ -178,10 +174,10 @@ class SINDyBase(object):
         data_slice_shape[dim] = 1
         data_dx = [np.zeros(tuple(new_data_shape))]*len(order)
 
-        if n != len(xgrid):
+        if _n != len(xgrid):
             raise ValueError('Grids information does not match with the data!')
 
-        for j in np.arange(degree, n - degree):
+        for j in np.arange(degree, _n - degree):
             pts = np.arange(j - degree, j + degree)
             idxs[dim] = slice(j - degree, j + degree)
             pos = (dim, ) + tuple(np.arange(0, dim)) + tuple(np.arange(dim+1, data.ndim))
@@ -199,8 +195,8 @@ class SINDyBase(object):
 
         if len(order) == 1:
             return data_dx[0]
-        else:
-            return data_dx
+
+        return data_dx
 
     @staticmethod
     def get_poly_exponents(nfeat, degree=1):
@@ -212,10 +208,10 @@ class SINDyBase(object):
         if nfeat == 0:
             yield ()
         else:
-            for x in np.arange(degree+1):
-                for t in SINDyBase.get_poly_exponents(nfeat - 1, degree):
-                    if sum(t) + x <= degree:
-                        yield t + (x,)
+            for _x in np.arange(degree+1):
+                for _t in SINDyBase.get_poly_exponents(nfeat - 1, degree):
+                    if sum(_t) + _x <= degree:
+                        yield _t + (_x,)
 
     @staticmethod
     def get_ordered_poly_exponents(nfeat, degree=1, remove_zero_order=False):
@@ -229,8 +225,7 @@ class SINDyBase(object):
         all_exponents = exponents[np.argsort(np.sum(exponents, axis=1))]
         if remove_zero_order:
             return all_exponents[1:, :]
-        else:
-            return all_exponents
+        return all_exponents
 
     @staticmethod
     def polynomial_expansion(data, degree=1, remove_zero_order=False, var_names=None):
@@ -253,55 +248,56 @@ class SINDyBase(object):
                                    axis=0) for e in exponents]).T
 
         # descriptions of each extended feature
-        desp = SINDyBase.exponent_to_description(exponents, 'sup', remove_zero_order, var_names=var_names)
+        desp = SINDyBase.exponent_to_description(exponents, 'sup', remove_zero_order,
+                                                 var_names=var_names)
 
         return result, desp
 
     @staticmethod
-    def threshold_ls(mtx, b, cut_off=1e-3, max_iter=10, normalize=0):
+    def threshold_ls(mtx, _b, cut_off=1e-3, max_iter=10, normalize=0):
         """
         Find the sparse coefficients of fit using threshold least squares
         :param mtx: the training theta matrix of shape (M, N)
-        :param b: a vector or an array of shape (M,) or (M, K)
+        :param _b: a vector or an array of shape (M,) or (M, K)
         :param cut_off: the threshold cutoff value
         :param max_iter: # of iterations
         :param normalize: normalization methods, default as 0 (no normalization)
         :return: coefficients of fit
         """
-        if len(b.shape) == 1:
-            b = b[:, np.newaxis]
-        dim = b.shape[-1]
+        if len(_b.shape) == 1:
+            _b = _b[:, np.newaxis]
+        dim = _b.shape[-1]
 
         # normalize each column of mtx
         if normalize != 0:
             w_col_norms = np.linalg.norm(mtx, ord=normalize, axis=0)
-            b_col_norms = np.linalg.norm(b, ord=normalize, axis=0)
+            b_col_norms = np.linalg.norm(_b, ord=normalize, axis=0)
             mtx = mtx / w_col_norms[np.newaxis, :]
-            b = b / b_col_norms[np.newaxis, :]
+            _b = _b / b_col_norms[np.newaxis, :]
 
-        w = np.linalg.lstsq(mtx, b, rcond=None)[0]
+        _w = np.linalg.lstsq(mtx, _b, rcond=None)[0]
         for _ in np.arange(max_iter):
-            small_inds = np.abs(w) <= cut_off
-            w[small_inds] = 0
-            if np.all(np.sum(np.abs(w), axis=0)):
+            small_inds = np.abs(_w) <= cut_off
+            _w[small_inds] = 0
+            if np.all(np.sum(np.abs(_w), axis=0)):
                 for ind in np.arange(dim):
                     big_inds = ~small_inds[:, ind]
-                    w[big_inds, ind] = np.linalg.lstsq(mtx[:, big_inds], b[:, ind], rcond=None)[0]
+                    _w[big_inds, ind] = np.linalg.lstsq(mtx[:, big_inds], _b[:, ind], rcond=None)[0]
             else:
                 break
 
         if normalize != 0:
-            w = w * w_col_norms[:, np.newaxis]
-            w = w / b_col_norms[np.newaxis, :]
+            _w = _w * w_col_norms[:, np.newaxis]
+            _w = _w / b_col_norms[np.newaxis, :]
 
-        return w
+        return _w
 
     @staticmethod
-    def sparsify_dynamics(mtx, b, init_tol, max_iter=25, thresh_iter=10,
+    def sparsify_dynamics(mtx, _b, init_tol, max_iter=25, thresh_iter=10,
                           l0_penalty=None, split=0.8, normalize=0):
         """
         :param mtx: the theta matrix of shape (M, N)
-        :param b: a vector or an array of shape (M,) or (M, K)
+        :param _b: a vector or an array of shape (M,) or (M, K)
         :param init_tol: maximum tolerance (cut_off value)
         :param max_iter: maximum iteration of the outer loop
         :param thresh_iter: maximum iteration for threshold least squares
@@ -312,20 +308,20 @@ class SINDyBase(object):
         """
         if mtx.ndim != 2:
             raise ValueError('mtx is not a 2D numpy array!')
-        if b.ndim == 1:
-            b = b[:, np.newaxis]
-        elif b.ndim > 2:
+        if _b.ndim == 1:
+            _b = _b[:, np.newaxis]
+        elif _b.ndim > 2:
             raise ValueError('b is not a 1D/2D numpy array!')
 
         # split the data
         np.random.seed(12345)
-        n = mtx.shape[0]
-        train = np.random.choice(n, int(n*split), replace=False)
-        test = [x for x in np.arange(n) if x not in train]
+        _n = mtx.shape[0]
+        train = np.random.choice(_n, int(_n*split), replace=False)
+        test = [x for x in np.arange(_n) if x not in train]
         train_mtx = mtx[train, :]
         test_mtx = mtx[test, :]
-        train_b = b[train, :]
-        test_b = b[test, :]
+        train_b = _b[train, :]
+        test_b = _b[test, :]
         # set up initial tolerance, l0 penalty, best error, etc.
         if l0_penalty is None:
             # l0_penalty = 0.001*np.linalg.cond(mtx)
@@ -335,15 +331,16 @@ class SINDyBase(object):
 
         # no sparsity constraints
         w_best = np.linalg.lstsq(train_mtx, train_b, rcond=None)[0]
-        err_best = np.linalg.norm(test_b - test_mtx.dot(w_best), 2) + l0_penalty*np.count_nonzero(w_best)
+        err_best = np.linalg.norm(test_b - test_mtx.dot(w_best), 2) + \
+                   l0_penalty*np.count_nonzero(w_best)
         tol_best = 0.
         imp_flag = True
         for i in np.arange(max_iter):
-            w = SINDyBase.threshold_ls(train_mtx, train_b, tol, thresh_iter, normalize)
-            err = np.linalg.norm(test_b - test_mtx.dot(w), 2) + l0_penalty*np.count_nonzero(w)
+            _w = SINDyBase.threshold_ls(train_mtx, train_b, tol, thresh_iter, normalize)
+            err = np.linalg.norm(test_b - test_mtx.dot(_w), 2) + l0_penalty*np.count_nonzero(_w)
             if err < err_best:
                 err_best = err
-                w_best = w
+                w_best = _w
                 tol_best = tol
                 tol += d_tol
                 imp_flag = False
@@ -360,7 +357,8 @@ class SINDyBase(object):
         return w_best, tol_best
 
     @staticmethod
-    def exponent_to_description(exponents, typ='sup', remove_zero_order=False, as_dict=False, var_names=None):
+    def exponent_to_description(exponents, typ='sup', remove_zero_order=False, as_dict=False,
+                                var_names=None):
         """
         :param exponents: a 2D numpy array of exponents
         :param typ: a string, can be either 'sup' (superscript) or 'sub' (subscript)
@@ -374,20 +372,21 @@ class SINDyBase(object):
 
         desp = []
         desp_dict = {}
-        m, n = exponents.shape
+        _m, _n = exponents.shape
 
         if typ == 'sup':
             if var_names is not None:
-                assert isinstance(var_names, list), "var_names must be a list of strings when typ =='sup'!"
-                assert len(var_names) == n, "length of var_names doesn't match with exponents!"
+                assert isinstance(var_names, list), "var_names must be a list of strings when " \
+                                                    "typ =='sup'!"
+                assert len(var_names) == _n, "length of var_names doesn't match with exponents!"
             else:
-                var_names = ['u%d' % i for i in np.arange(n)]
+                var_names = ['u%d' % i for i in np.arange(_n)]
 
-            for i in np.arange(m):
+            for i in np.arange(_m):
                 if np.any(exponents[i, :]):
                     # exist nonzero element
                     key = ''
-                    for j in np.arange(n):
+                    for j in np.arange(_n):
                         if exponents[i, j] == 1:
                             key += var_names[j]
                         elif exponents[i, j]:
@@ -405,24 +404,25 @@ class SINDyBase(object):
             # name of each dimension
             # (with xyz coordinates as default except for higher dimensional cases)
             if var_names is not None:
-                assert isinstance(var_names, str), "var_names must be of type str when typ == 'sub'!"
+                assert isinstance(var_names, str), "var_names must be of type str when " \
+                                                   "typ == 'sub'!"
             else:
                 var_names = 'u'
 
-            if n == 1:
+            if _n == 1:
                 dim_strs = ['x']
-            elif n == 2:
+            elif _n == 2:
                 dim_strs = ['x', 'y']
-            elif n == 3:
+            elif _n == 3:
                 dim_strs = ['x', 'y', 'z']
             else:
-                dim_strs = ['x%d' % i for i in np.arange(n)]
+                dim_strs = ['x%d' % i for i in np.arange(_n)]
 
-            for i in np.arange(m):
+            for i in np.arange(_m):
                 if np.any(exponents[i, :]):
                     # exist nonzero element
                     key = (var_names + '_{')
-                    for j in np.arange(n):
+                    for j in np.arange(_n):
                         key += dim_strs[j]*exponents[i, j]
                     key += '}'
                     desp.append(key)
@@ -439,5 +439,5 @@ class SINDyBase(object):
         # which type of description to return
         if as_dict:
             return desp_dict
-        else:
-            return desp
+
+        return desp

@@ -1,6 +1,8 @@
 """
 pySINDy init
 """
+# pylint: skip-file
+
 __all__ = ['sindybase', 'sindy', 'isindy']
 
 from .sindybase import SINDyBase
