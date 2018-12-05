@@ -1,6 +1,8 @@
 """
 Derived module from sindybase.py for implicit SINDy
 """
+# pylint: skip-file
+
 import numpy as np
 import scipy as sp
 from .sindybase import SINDyBase
