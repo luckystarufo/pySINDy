@@ -1,4 +1,3 @@
-#!env/bin/python3.6
 # -*- coding: utf-8 -*-
 import re
 import sys
