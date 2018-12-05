@@ -93,8 +93,9 @@ class ISINDy(SINDyBase):
         # compute time derivative
         d_dt = FinDiff(data.ndim - 1, dt, 1, acc=deriv_acc)
         x_dot = d_dt(data).T
-
-        data, x_dot = self.smoothing(data, x_dot)
+        
+        for i in range (x_dot.shape[1]):
+            x_dot[:,i] = self.smoothing(x_dot[:,i])
 
         # polynomial expansion of orginal data
         var_names = ['u%d' % i for i in np.arange(n)]
@@ -120,6 +121,13 @@ class ISINDy(SINDyBase):
             # ADM
             self._coef[:, k] = self.adm_initvary(self, null_space_k, Lambda, max_iter, tol)
         return self
+            
+            
+    def coefficients(self):
+        return self._coef
+    
+    def descriptions(self):
+        return self._desp
 
     @staticmethod
     def expand_descriptions(desp, var_name=None):
@@ -237,7 +245,7 @@ class ISINDy(SINDyBase):
         return Xi
 
     @staticmethod
-    def smoothing(self, vec):
+    def smoothing(vec):
         """
         :param vec: input data vector for smoothing
         :return: smoothed data vector same shape as vec

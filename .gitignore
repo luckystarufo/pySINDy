@@ -6,3 +6,4 @@
 *.mat
 *.csv
 .coverage
+__pycache__
