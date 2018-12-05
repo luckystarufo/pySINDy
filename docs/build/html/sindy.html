@@ -44,8 +44,40 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="sindy">
-<h1>SINDy<a class="headerlink" href="#sindy" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pySINDy.sindy">
+<span id="sindy"></span><h1>SINDy<a class="headerlink" href="#module-pySINDy.sindy" title="Permalink to this headline">¶</a></h1>
+<p>Derived module from sindybase.py for classical SINDy</p>
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">pySINDy.sindy.</code><code class="descname">SINDy</code><span class="sig-paren">(</span><em>name='SINDy model'</em><span class="sig-paren">)</span></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pySINDy.sindybase.SINDyBase</span></code></p>
+<p>Sparse Identification of Nonlinear Dynamics:
+reference: <a class="reference external" href="http://www.pnas.org/content/pnas/113/15/3932.full.pdf">http://www.pnas.org/content/pnas/113/15/3932.full.pdf</a></p>
+<dl class="method">
+<dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>data</em>, <em>dt</em>, <em>poly_degree=2</em>, <em>cut_off=0.001</em>, <em>deriv_acc=2</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; dynamics data to be processed</li>
+<li><strong>dt</strong> &#8211; float, represents grid spacing</li>
+<li><strong>poly_degree</strong> &#8211; degree of polynomials to be included in theta matrix</li>
+<li><strong>cut_off</strong> &#8211; the threshold cutoff value for sparsity</li>
+<li><strong>deriv_acc</strong> &#8211; (positive) integer, derivative accuracy</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a SINDy model</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

@@ -44,8 +44,95 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="isindy">
-<h1>ISINDy<a class="headerlink" href="#isindy" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pySINDy.isindy">
+<span id="isindy"></span><h1>ISINDy<a class="headerlink" href="#module-pySINDy.isindy" title="Permalink to this headline">¶</a></h1>
+<p>Derived module from sindybase.py for implicit SINDy</p>
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">pySINDy.isindy.</code><code class="descname">ISINDy</code><span class="sig-paren">(</span><em>name='SINDy model'</em><span class="sig-paren">)</span></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pySINDy.sindybase.SINDyBase</span></code></p>
+<p>Implicit Sparse Identification of Nonlinear Dynamics
+(Inferring biological networks by sparse identification of nonlinear dynamics)
+reference: <a class="reference external" href="https://arxiv.org/pdf/1605.08368.pdf">https://arxiv.org/pdf/1605.08368.pdf</a></p>
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">adm</code><span class="sig-paren">(</span><em>null_space</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>null_space</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">find a sparse representation</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">build_theta_matrix</code><span class="sig-paren">(</span><em>data</em>, <em>d_vec</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; a 2D numpy array of features stored in each column</li>
+<li><strong>d_vec</strong> &#8211; a vector of time derivatives of a state</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a 2D numpy array expanded by the multiplication of data and d_vec</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">expand_descriptions</code><span class="sig-paren">(</span><em>desp</em>, <em>var_name=None</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>data</em>, <em>dt</em>, <em>poly_degree=2</em>, <em>deriv_acc=2</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; dynamics data to be processed</li>
+<li><strong>dt</strong> &#8211; float, represents grid spacing</li>
+<li><strong>poly_degree</strong> &#8211; degree of polynomials to be included in theta matrix</li>
+<li><strong>deriv_acc</strong> &#8211; (positive) integer, derivative accuracy</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an implicit SINDy model</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">nullify</code><span class="sig-paren">(</span><em>theta</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>theta</strong> &#8211; a 2D numpy array</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a 2D numpy array representing the null space of theta</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

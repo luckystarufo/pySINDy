@@ -44,8 +44,130 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="sindypde">
-<h1>SINDyPDE<a class="headerlink" href="#sindypde" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pySINDy.sindypde">
+<span id="sindypde"></span><h1>SINDyPDE<a class="headerlink" href="#module-pySINDy.sindypde" title="Permalink to this headline">¶</a></h1>
+<p>Derived module from sindybase.py for SINDy of PDE</p>
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">pySINDy.sindypde.</code><code class="descname">SINDyPDE</code><span class="sig-paren">(</span><em>name='SINDy model'</em><span class="sig-paren">)</span></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pySINDy.sindybase.SINDyBase</span></code></p>
+<p>Data-driven discovery of partial differential equations
+reference: <a class="reference external" href="http://advances.sciencemag.org/content/3/4/e1602614/tab-pdf">http://advances.sciencemag.org/content/3/4/e1602614/tab-pdf</a></p>
+<dl class="method">
+<dt>
+<code class="descname">compute_spatial_derivatives</code><span class="sig-paren">(</span><em>data</em>, <em>dx</em>, <em>order</em>, <em>acc</em><span class="sig-paren">)</span></dt>
+<dd><p>Compute the spatial derivatives presented in descriptions with proposed method
+:param data: a dict of arrays, value of state variables
+:param dx: float or a list of floats, for spatial grid spacing
+:param order: maximum order of derivatives applied on spatial dimensions
+:param acc: accuracy of the derivatives
+:return: a dict of arrays of spatial derivatives</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">dict_to_2darray</code><span class="sig-paren">(</span><em>data_dict</em><span class="sig-paren">)</span></dt>
+<dd><p>This function flattens all the arrays in a dict and stack them together
+:param data_dict: a dict of arrays
+:return: a 2D numpy array and a list of descriptions</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>data</em>, <em>dt</em>, <em>dx</em>, <em>poly_degree=2</em>, <em>space_deriv_order=2</em>, <em>cut_off=0.001</em>, <em>deriv_acc=2</em>, <em>sample_rate=1.0</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; a numpy array or a dict of arrays, dynamics data to be processed</li>
+<li><strong>dt</strong> &#8211; float, for temporal grid spacing</li>
+<li><strong>dx</strong> &#8211; float or list of floats, for spatial grid spacing</li>
+<li><strong>poly_degree</strong> &#8211; degree of polynomials to be included in theta matrix (all derivatives remain degree 1)</li>
+<li><strong>space_deriv_order</strong> &#8211; maximum order of derivatives applied on spatial dimensions</li>
+<li><strong>cut_off</strong> &#8211; the threshold cutoff value for sparsity</li>
+<li><strong>deriv_acc</strong> &#8211; (positive) integer, derivative accuracy</li>
+<li><strong>sample_rate</strong> &#8211; float, proportion of the data to use</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a SINDyPDE model</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">orders_to_op</code><span class="sig-paren">(</span><em>order</em>, <em>dx</em>, <em>acc</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>order</strong> &#8211; orders of the derivative</li>
+<li><strong>dx</strong> &#8211; a float or a list of floats, grid spacings</li>
+<li><strong>acc</strong> &#8211; a positive integer, accuracy of the derivatives</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">product_expansion</code><span class="sig-paren">(</span><em>u</em>, <em>v</em>, <em>u_desp</em>, <em>v_desp</em>, <em>included=True</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>u</strong> &#8211; a 2D numpy array of features stored in each column</li>
+<li><strong>v</strong> &#8211; another 2D numpy array of features stored in each column</li>
+<li><strong>u_desp</strong> &#8211; a list of descriptions for each columns of u</li>
+<li><strong>v_desp</strong> &#8211; a list of descriptions for each columns of v</li>
+<li><strong>included</strong> &#8211; a boolean value, indicates whether to include original columns or not</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a 2D numpy array of product features and corresponding descriptions</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">sampling_idxs</code><span class="sig-paren">(</span><em>shape</em>, <em>space_sample_rate</em>, <em>time_sample_rate</em>, <em>acc_x=2</em>, <em>acc_t=2</em>, <em>major='row'</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shape</strong> &#8211; numpy array shape information</li>
+<li><strong>space_sample_rate</strong> &#8211; proportion of sampling for spatial dimensions</li>
+<li><strong>time_sample_rate</strong> &#8211; proportion of sampling for time dimension</li>
+<li><strong>width_x</strong> &#8211; specify the boundary for spatial sampling</li>
+<li><strong>width_t</strong> &#8211; specify the boundary for temporal sampling</li>
+<li><strong>major</strong> &#8211; either &#8216;row&#8217; (row major) or &#8216;col&#8217; (column major)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a list of indices of sampling points</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

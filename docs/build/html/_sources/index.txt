@@ -3,7 +3,7 @@ Welcome to PySINDy's documentation!
 
 .. image:: _static/logo_PySINDy.png
    :height: 150px
-   :width: 150 px
+   :width: 180 px
    :align: right
 
 Python Sparse Identification of Nonlinear Dynamics

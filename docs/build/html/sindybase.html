@@ -44,8 +44,221 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="sindybase">
-<h1>SINDyBase<a class="headerlink" href="#sindybase" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pySINDy.sindybase">
+<span id="sindybase"></span><h1>SINDyBase<a class="headerlink" href="#module-pySINDy.sindybase" title="Permalink to this headline">¶</a></h1>
+<p>Base Module for SINDy: &#8216;fit&#8217; method must be implemented in inherited classes</p>
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="descclassname">pySINDy.sindybase.</code><code class="descname">SINDyBase</code><span class="sig-paren">(</span><em>name='SINDy model'</em><span class="sig-paren">)</span></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Sparse Identification of Nonlinear Dynamics base class</p>
+<dl class="attribute">
+<dt>
+<code class="descname">coefficients</code></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">get the coefficients of the model</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">descriptions</code></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">get the items we need to fit the data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">exponent_to_description</code><span class="sig-paren">(</span><em>exponents</em>, <em>typ='sup'</em>, <em>remove_zero_order=False</em>, <em>as_dict=False</em>, <em>var_names=None</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>exponents</strong> &#8211; a 2D numpy array of exponents</li>
+<li><strong>typ</strong> &#8211; a string, can be either &#8216;sup&#8217; (superscript) or &#8216;sub&#8217; (subscript)</li>
+<li><strong>remove_zero_order</strong> &#8211; boolean value, indicate whether to remove the zero order term</li>
+<li><strong>as_dict</strong> &#8211; whether to include exponents in the descriptions as a dict</li>
+<li><strong>var_names</strong> &#8211; variable name, default to be None</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a list or a dict (depends on &#8216;as_dict&#8217;) of descriptions of corresponding exponents</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">finite_difference</code><span class="sig-paren">(</span><em>data</em>, <em>dx</em>, <em>order=1</em>, <em>dim=0</em><span class="sig-paren">)</span></dt>
+<dd><p>Take derivative using 2nd order finite difference method
+:param data: a tensor to be differentiated
+:param dx: grid spacing, assume to be uniform
+:param order: the order of the derivative to be applied
+:param dim: the dimension to be taken the derivative
+:return: a tensor after differentiation</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descname">fit</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span></dt>
+<dd><p>Abstract method to fit the snapshot matrix, it has to be
+implemented in subclasses
+:param data: the snapshot matrix
+:return: None</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">get_ordered_poly_exponents</code><span class="sig-paren">(</span><em>nfeat</em>, <em>degree=1</em>, <em>remove_zero_order=False</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nfeat</strong> &#8211; number of original features</li>
+<li><strong>degree</strong> &#8211; maximum degree of the polynomials</li>
+<li><strong>remove_zero_order</strong> &#8211; boolean value, indicate whether to remove the zero order term</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a 2D array consists of ordered exponents according to the sum</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">get_poly_exponents</code><span class="sig-paren">(</span><em>nfeat</em>, <em>degree=1</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nfeat</strong> &#8211; number of original features</li>
+<li><strong>degree</strong> &#8211; maximum degree of the polynomials</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a 2D array consists of the exponents</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">pointwise_polynomial_difference</code><span class="sig-paren">(</span><em>data</em>, <em>xgrid</em>, <em>order=1</em>, <em>degree=2</em>, <em>index=None</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; a 1D flattened vector represents nearby function values</li>
+<li><strong>xgrid</strong> &#8211; grid information</li>
+<li><strong>order</strong> &#8211; the order of the derivatives to be applied</li>
+<li><strong>index</strong> &#8211; index of the derivative to take</li>
+<li><strong>degree</strong> &#8211; degree of polynomial to use</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">value of derivative at this point</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">polynomial_difference</code><span class="sig-paren">(</span><em>data</em>, <em>xgrid</em>, <em>order=1</em>, <em>dim=0</em>, <em>degree=2</em><span class="sig-paren">)</span></dt>
+<dd><p>Taking derivatives using Chebyshev polynomial interpolation
+:param data: a tensor to be differentiated
+:param xgrid: grid information
+:param order: an integer, or a list of orders of the derivative to be applied
+:param dim: the dimension to be taken the derivative
+:param degree: degree of polynomials to be used for interpolation
+:return: a list of tensors after differentiation, same length of order</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">polynomial_expansion</code><span class="sig-paren">(</span><em>data</em>, <em>degree=1</em>, <em>remove_zero_order=False</em>, <em>var_names=None</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; a 2D numpy array of original features stored in each column</li>
+<li><strong>degree</strong> &#8211; degree of polynomials of features to be expanded</li>
+<li><strong>remove_zero_order</strong> &#8211; boolean value, indicate whether to remove the zero order term</li>
+<li><strong>var_names</strong> &#8211; variable names, default as None</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a tensor consists of extended features, and corresponding descriptions</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">sparsify_dynamics</code><span class="sig-paren">(</span><em>mtx</em>, <em>b</em>, <em>init_tol</em>, <em>max_iter=25</em>, <em>thresh_iter=10</em>, <em>l0_penalty=None</em>, <em>split=0.8</em>, <em>normalize=0</em><span class="sig-paren">)</span></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mtx</strong> &#8211; the theta matrix of shape (M, N)</li>
+<li><strong>b</strong> &#8211; a vector or an array of shape (M,) or (M, K)</li>
+<li><strong>init_tol</strong> &#8211; maximum tolerance (cut_off value)</li>
+<li><strong>max_iter</strong> &#8211; maximum iteration of the outer loop</li>
+<li><strong>thresh_iter</strong> &#8211; maximum iteration for threshold least squares</li>
+<li><strong>l0_penalty</strong> &#8211; penalty factor for nonzero coefficients</li>
+<li><strong>split</strong> &#8211; proportion of the training set</li>
+<li><strong>normalize</strong> &#8211; normalization methods, default as 0 (no normalization)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the best coefficients of fit</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt>
+<em class="property">static </em><code class="descname">threshold_ls</code><span class="sig-paren">(</span><em>mtx</em>, <em>b</em>, <em>cut_off=0.001</em>, <em>max_iter=10</em>, <em>normalize=0</em><span class="sig-paren">)</span></dt>
+<dd><p>Find the sparse coefficients of fit using threshold least squares
+:param mtx: the training theta matrix of shape (M, N)
+:param b: a vector or an array of shape (M,) or (M, K)
+:param cut_off: the threshold cutoff value
+:param max_iter: # of iterations
+:param normalize: normalization methods, default as 0 (no normalization)
+:return: coefficients of fit</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
