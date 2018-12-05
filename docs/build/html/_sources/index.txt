@@ -1,21 +1,24 @@
 Welcome to PySINDy's documentation!
 ===================================
 
-.. image:: _static/logo_PySINDy.png
-   :height: 150px
-   :width: 180 px
-   :align: right
-
 Python Sparse Identification of Nonlinear Dynamics
 
 Description
 --------------------
-PySINDy is a python package for blablabla ... (TBD)
+PySINDy is a Python package that implements the SINDy-family algorithms.
+SINDy is short for "Sparse Identification of Nonlinear Dynamics", which
+is a class of data-driven algorithms for system identification. This class
+of algorithms are mainly developed by Steve Brunton and Nathan Kutz at the
+University of Washington. Since then many variants arose, such as SINDy for
+PDEs, implicit SINDy, parametric SINDy, Hybrid SINDy, SINDy with control, etc.
+In PySINDy, we will (or we will try our best to) implement the majority of
+the variants with friendly user interfaces and we will provide examples to
+illustrate the usage.
 
 Installation
 --------------------
-PyDMD requires requires numpy, scipy, matplotlib, findiff, pytest, sphinx (for the
-documentation). The code is compatible with Python 2.7 and Python 3.6. It can be
+PyDMD requires requires numpy, scipy, matplotlib, findiff, pytest(for unittest), sphinx (for the
+documentation). The code is compatible with Python 3.5 and Python 3.6. It can be
 installed using pip or directly from the source code.
 
 Installing via PIP

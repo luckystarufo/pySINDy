@@ -8,7 +8,7 @@
     
     <title>Welcome to PySINDy’s documentation! &mdash; PySINDy 0.1.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -24,36 +24,90 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="PySINDy 0.1.0 documentation" href="#" />
-    <link rel="next" title="Code Documentation" href="code.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="next" title="Code Documentation" href="code.html" /> 
   </head>
   <body role="document">
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="Code Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">PySINDy 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to PySINDy&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#installing-via-pip">Installing via PIP</a></li>
+<li><a class="reference internal" href="#installing-from-source">Installing from source</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-s-guide">Developer&#8217;s Guide</a></li>
+<li><a class="reference internal" href="#tutorials">Tutorials</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="code.html"
+                        title="next chapter">Code Documentation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="welcome-to-pysindy-s-documentation">
 <h1>Welcome to PySINDy&#8217;s documentation!<a class="headerlink" href="#welcome-to-pysindy-s-documentation" title="Permalink to this headline">¶</a></h1>
-<a class="reference internal image-reference" href="_images/logo_PySINDy.png"><img alt="_images/logo_PySINDy.png" class="align-right" src="_images/logo_PySINDy.png" style="width: 180px; height: 150px;" /></a>
 <p>Python Sparse Identification of Nonlinear Dynamics</p>
 <div class="section" id="description">
 <h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
-<p>PySINDy is a python package for blablabla ... (TBD)</p>
+<p>PySINDy is a Python package that implements the SINDy-family algorithms.
+SINDy is short for &#8220;Sparse Identification of Nonlinear Dynamics&#8221;, which
+is a class of data-driven algorithms for system identification. This class
+of algorithms are mainly developed by Steve Brunton and Nathan Kutz at the
+University of Washington. Since then many variants arose, such as SINDy for
+PDEs, implicit SINDy, parametric SINDy, Hybrid SINDy, SINDy with control, etc.
+In PySINDy, we will (or we will try our best to) implement the majority of
+the variants with friendly user interfaces and we will provide examples to
+illustrate the usage.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>PyDMD requires requires numpy, scipy, matplotlib, findiff, pytest, sphinx (for the
-documentation). The code is compatible with Python 2.7 and Python 3.6. It can be
+<p>PyDMD requires requires numpy, scipy, matplotlib, findiff, pytest(for unittest), sphinx (for the
+documentation). The code is compatible with Python 3.5 and Python 3.6. It can be
 installed using pip or directly from the source code.</p>
 <div class="section" id="installing-via-pip">
 <h3>Installing via PIP<a class="headerlink" href="#installing-via-pip" title="Permalink to this headline">¶</a></h3>
@@ -117,70 +171,28 @@ updates in the examples folder. Here the list of the exported tutorials:</p>
 
 
           </div>
-          
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to PySINDy&#8217;s documentation!</a><ul>
-<li><a class="reference internal" href="#description">Description</a></li>
-<li><a class="reference internal" href="#installation">Installation</a><ul>
-<li><a class="reference internal" href="#installing-via-pip">Installing via PIP</a></li>
-<li><a class="reference internal" href="#installing-from-source">Installing from source</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#developer-s-guide">Developer&#8217;s Guide</a></li>
-<li><a class="reference internal" href="#tutorials">Tutorials</a></li>
-<li><a class="reference internal" href="#references">References</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-</li>
-</ul>
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="code.html" title="next chapter">Code Documentation</a></li>
-  </ul></li>
-</ul>
-</div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2018, Yuying Liu, Yi Chu, Lianzong Wang.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/index.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="code.html" title="Code Documentation"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">PySINDy 0.1.0 documentation</a> &raquo;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2018, Yuying Liu, Yi Chu, Lianzong Wang.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.
+    </div>
   </body>
 </html>
