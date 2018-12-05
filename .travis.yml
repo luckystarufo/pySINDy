@@ -10,4 +10,4 @@ install:
 
 script:
   - pytest pySINDy
-  - ./linting pySINDy
+  - python linting.py pySINDy
