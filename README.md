@@ -4,6 +4,14 @@
   </a>
 </p>
 
+</p>
+<p align="center">
+    <a href="#travis" alt="Travis Build Status">
+        <img src="https://travis-ci.org/luckystarufo/pySINDy.svg?branch=master" /></a>
+    <a href="#docs" alt="Documentation Status">
+        <img src="https://readthedocs.org/projects/pysindy/badge/?version=latest" /></a>
+</p>   
+
 **pySINDy**: python Sparse Identification of Nonlinear Dynamics
 
 ## Table of contents
