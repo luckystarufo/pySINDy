@@ -1,6 +1,6 @@
 <p align="left">
   <a href="https://pysindy.readthedocs.io/en/latest/" target="_blank" >
-    <img alt="Python Sparse Identification of Nonelinear Dynamics" src="docs/source/_static/logo_PySINDy.png" width="250" height="130" />
+    <img alt="Python Sparse Identification of Nonelinear Dynamics" src="docs/source/_static/logo_PySINDy.png" width="250" height="120" />
   </a>
 </p>
 
