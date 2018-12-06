@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://pysindy.readthedocs.io/en/latest/" target="_blank" >
-    <img alt="Python Dynamic Mode Decomposition" src="docs/source/_static/logo_PySINDy.png" width="200" />
+    <img alt="Python Sparse Identification of Nonelinear Dynamics" src="docs/source/_static/logo_PySINDy.png" width="200" />
   </a>
 </p>
 
