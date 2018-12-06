@@ -1,11 +1,11 @@
-<p align="center">
+<p align="left">
   <a href="https://pysindy.readthedocs.io/en/latest/" target="_blank" >
-    <img alt="Python Sparse Identification of Nonelinear Dynamics" src="docs/source/_static/logo_PySINDy.png" width="200" />
+    <img alt="Python Sparse Identification of Nonelinear Dynamics" src="docs/source/_static/logo_PySINDy.png" width="500" />
   </a>
 </p>
 
 </p>
-<p align="center">
+<p align="left">
     <a href="#travis" alt="Travis Build Status">
         <img src="https://travis-ci.org/luckystarufo/pySINDy.svg?branch=master" /></a>
     <a href="#docs" alt="Documentation Status">
