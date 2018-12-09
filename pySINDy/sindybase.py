@@ -2,6 +2,7 @@
 Base Module for SINDy: 'fit' method must be implemented in inherited classes
 """
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class SINDyBase(object):
@@ -27,6 +28,12 @@ class SINDyBase(object):
         :return: get the items we need to fit the data
         """
         return self._desp
+
+    def plot_coefficients(self):
+        """
+        :return: plot of the coefficients
+        """
+        SINDyBase.plot(self._coef.T, self._desp)
 
     def fit(self, data):
         """
@@ -441,3 +448,30 @@ class SINDyBase(object):
             return desp_dict
 
         return desp
+
+    @staticmethod
+    def plot(coe, desp):
+        """
+        :param coe: coefficients to be plotted
+        :param desp: descriptions of data
+        :return: a plot of coefficients with corresponding description
+        """
+        idx = np.ones((coe.shape), dtype=bool)
+        _mm, _nn = coe.shape
+        for i in range(_nn):
+            vec = coe[:, i]
+            if np.all(vec == 0):
+                idx[:, i] = 0
+        _coe = coe[idx].reshape(_mm, -1)
+        _desp = []
+        for i in range(_nn):
+            if idx[0, i] == 1:
+                _desp.append(desp[i])
+        _m, _n = _coe.shape
+        width = 1 / 1.5
+        plt.figure(num=None, figsize=(40, 5), dpi=80, facecolor='w', edgecolor='k')
+        for i in range(_m):
+            plt.subplot(_m, _m, _m * i + 1)
+            plt.bar(range(_n), _coe[i], width)
+            plt.ylabel('value')
+            plt.xticks(range(_n), _desp)

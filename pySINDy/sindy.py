@@ -2,7 +2,6 @@
 Derived module from sindybase.py for classical SINDy
 """
 import numpy as np
-import matplotlib.pyplot as plt
 from findiff import FinDiff
 from .sindybase import SINDyBase
 
@@ -43,27 +42,3 @@ class SINDy(SINDyBase):
         self._coef, _ = self.sparsify_dynamics(lib, x_dot, cut_off)
 
         return self
-
-    def plot_coefficients(self):
-        """
-        :return: plot of the coefficients
-        """
-        SINDy.plot(self._coef.T, self._desp)
-
-    @staticmethod
-    def plot(data, objects):
-        """
-        :param data: data to be plotted
-        :param objects: descriptions of data
-        :return: a plot of coefficients with corresponding description
-        """
-        datasize = data.shape
-        _m = datasize[0]
-        _n = datasize[1]
-        width = 1 / 1.5
-        plt.figure(num=None, figsize=(25, 5), dpi=80, facecolor='w', edgecolor='k')
-        for i in range(_m):
-            plt.subplot(_m, _m, _m * i + 1)
-            plt.bar(range(_n), data[i], width)
-            plt.ylabel('value')
-            plt.xticks(range(_n), objects)

@@ -3,10 +3,8 @@ Derived module from sindybase.py for implicit SINDy
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.linalg import null_space
 from findiff import FinDiff
-from .rpca import RPca
 from .sindybase import SINDyBase
 
 class ISINDy(SINDyBase):
@@ -16,7 +14,7 @@ class ISINDy(SINDyBase):
     reference: https://arxiv.org/pdf/1605.08368.pdf
     """
     def fit(self, data, _dt, poly_degree=2, deriv_acc=2,
-            lmbda=5e-3, max_iter=1000, tol=2e-3):
+            lmbda=5e-2, max_iter=1000, tol=2e-3):
         """
         :param data: dynamics data to be processed
         :param dt: float, represents grid spacing
@@ -67,20 +65,11 @@ class ISINDy(SINDyBase):
         for k in np.arange(_n):
             # formulate theta1, theta2, theta3 ...
             theta_k = self.build_theta_matrix(extended_data, x_dot[:, k])
-            # do principal component analysis to return low-rank theta
-            rpca = RPca(theta_k)
-            theta_k, _ = rpca.fit()
             # compute null spaces
             null_space_k = null_space(theta_k)
             # ADM
             self._coef[:, k] = ISINDy.adm_initvary(null_space_k, lmbda, max_iter, tol)
         return self
-
-    def plot_coefficients(self):
-        """
-        :return: plot of the coefficients
-        """
-        ISINDy.plot(self._coef.T, self._desp)
 
     def coefficients(self):
         """
@@ -215,8 +204,8 @@ class ISINDy(SINDyBase):
         """
         mean = np.mean(vec)
         std = np.std(vec)
-        upper = mean + std
-        lower = mean - std
+        upper = mean + 3*std
+        lower = mean - 3*std
 
         _m = len(vec)
         if vec[0] > upper or vec[0] < lower:
@@ -240,21 +229,3 @@ class ISINDy(SINDyBase):
         if vec[start] > upper or vec[start] < lower:
             return ISINDy.smoothing_helper(vec, start + 1, upper, lower)
         return vec[start]
-
-    @staticmethod
-    def plot(data, objects):
-        """
-        :param data: data to be plotted
-        :param objects: descriptions of data
-        :return: a plot of coefficients with corresponding description
-        """
-        datasize = data.shape
-        _m = datasize[0]
-        _n = datasize[1]
-        width = 1 / 1.5
-        plt.figure(num=None, figsize=(25, 5), dpi=80, facecolor='w', edgecolor='k')
-        for i in range(_m):
-            plt.subplot(_m, _m, _m * i + 1)
-            plt.bar(range(_n), data[i], width)
-            plt.ylabel('value')
-            plt.xticks(range(_n), objects)
