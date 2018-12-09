@@ -110,14 +110,15 @@ class TestISINDy(TestCase):
 
     def test_smoothing_initial_large_value(self):
         model = ISINDy()
-        vec = np.array([1e10, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+        vec = np.array([1e16, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+        print(np.std(vec))
         after_smoothing = model.smoothing(vec)
         expected = np.array([1, 1, 2, 3, 4, 5, 6, 7, 8, 9])
         np.testing.assert_allclose(after_smoothing, expected)
 
     def test_smoothing(self):
         model = ISINDy()
-        vec = np.array([1, 2, 1e10, 4, 5, 6, 1e10, 8, 9, 1e10])
+        vec = np.array([1, 2, 1e16, 4, 5, 6, 1e16, 8, 9, 1e16])
         after_smoothing = model.smoothing(vec)
         expected = np.array([1, 2, 2, 4, 5, 6, 6, 8, 9, 9])
         np.testing.assert_allclose(after_smoothing, expected)

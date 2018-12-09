@@ -192,8 +192,8 @@ class ISINDy(SINDyBase):
         """
         mean = np.mean(vec)
         std = np.std(vec)
-        upper = mean + 3*std
-        lower = mean - 3*std
+        upper = mean + std
+        lower = mean - std
 
         _m = len(vec)
         if vec[0] > upper or vec[0] < lower:
