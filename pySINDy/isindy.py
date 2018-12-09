@@ -3,6 +3,7 @@ Derived module from sindybase.py for implicit SINDy
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.linalg import null_space
 from findiff import FinDiff
 from .rpca import RPca
@@ -28,7 +29,7 @@ class ISINDy(SINDyBase):
         """
         if len(data.shape) == 1:
             data = data[np.newaxis, ]
-        
+
         if len(data.shape) == 2:
             _n, len_t = data.shape
 
@@ -74,6 +75,12 @@ class ISINDy(SINDyBase):
             # ADM
             self._coef[:, k] = ISINDy.adm_initvary(null_space_k, lmbda, max_iter, tol)
         return self
+
+    def plot_coefficients(self):
+        """
+        :return: plot of the coefficients
+        """
+        ISINDy.plot(self._coef.T, self._desp)
 
     def coefficients(self):
         """
@@ -234,39 +241,20 @@ class ISINDy(SINDyBase):
             return ISINDy.smoothing_helper(vec, start + 1, upper, lower)
         return vec[start]
 
-    # @staticmethod
-    # def smoothing(data, dxt):
-    #     """
-    #     :param vec: input data vector for smoothing
-    #     :return: smoothed data vector same shape as vec
-    #     """
-    #     mean = np.mean(dxt)
-    #     std = np.std(dxt)
-    #     print(std)
-    #     upper = mean+std/2
-    #     lower = mean-std/2
-    #     idx = np.ones((data.shape[1]),dtype = bool)
-    #     print(idx.shape)
-    #
-    #     m,n = data.shape
-    #     for i in range(m):
-    #         if (dxt[0, i]>upper or dxt[0, i]<lower):
-    #             print('first zero')
-    #             dxt[0, i] = 0
-    #         for j in range(1, n):
-    #             if dxt[j,i]>upper or dxt[j,i]<lower:
-    #                 idx[j] = False
-    #     print(data.shape)
-    #     print(dxt.shape)
-    #     data = data.T[idx].T
-    #     dxt = dxt[idx]
-    #
-    #
-    #     return data, dxt
-
-    # @staticmethod
-    # def smoothing_helper(self, vec, start, upper, lower):
-    #     if vec[start]>upper or vec[start]<lower:
-    #         return self.smoothing_helper(self, vec, start + 1, upper, lower)
-    #     else:
-    #         return vec[start]
+    @staticmethod
+    def plot(data, objects):
+        """
+        :param data: data to be plotted
+        :param objects: descriptions of data
+        :return: a plot of coefficients with corresponding description
+        """
+        datasize = data.shape
+        _m = datasize[0]
+        _n = datasize[1]
+        width = 1 / 1.5
+        plt.figure(num=None, figsize=(25, 5), dpi=80, facecolor='w', edgecolor='k')
+        for i in range(_m):
+            plt.subplot(_m, _m, _m * i + 1)
+            plt.bar(range(_n), data[i], width)
+            plt.ylabel('value')
+            plt.xticks(range(_n), objects)
