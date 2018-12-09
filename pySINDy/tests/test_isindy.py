@@ -90,37 +90,14 @@ class TestISINDy(TestCase):
     def test_adm_initvary(self):
         n = 1
         dt = 0.1
-        tspan = np.arange(0, 1 + dt, dt)
+        tspan = np.arange(0, 5 + dt, dt)
         len_t = len(tspan)
-
-        sss = 100
-        np.random.seed(12345)
+        np.random.seed(0)
         sinit = np.random.rand(n)
-        sinit = np.random.rand(sss, n)
-        sinit = np.concatenate((sinit, 2 * np.random.rand(sss, n)))
-        sinit = np.concatenate((sinit, 3 * np.random.rand(sss, n)))
-        measure = len(sinit)
-
-        tt = np.empty((len_t, measure))
-        x = np.empty((len_t, n, measure))
-        for ii in range(measure - 1):
-            sol = integrate.solve_ivp(TestISINDy.subtilis_competence, [0, len_t], sinit[ii, :],
-                                            t_eval=tspan, rtol=1e-7, atol=1e-7)
-            tt[:, ii] = sol.t
-            x[:, :, ii] = sol.y.T
-
-        xn = x
-        xt = np.empty((0, n))
-        dxt = np.empty(xt.shape)
-        t = np.empty((0,))
-        dxf = np.empty((len_t, n, measure))
-        for ll in range(measure):
-            for ii in range(len_t):
-                dxf[ii, :, ll] = TestISINDy.subtilis_competence(t, xn[ii, :, ll])
-
-            dxt = np.concatenate((dxt, dxf[:, :, ll]))
-            xt = np.concatenate((xt, xn[:, :, ll]))
-            t = np.concatenate((t, tt[:, ll]))
+        sol = integrate.solve_ivp(TestISINDy.subtilis_competence, [0, len_t], sinit, t_eval=tspan, rtol=1e-7, atol=1e-7)
+        xt = sol.y
+        dxt = TestISINDy.subtilis_competence(tspan, xt)[0]
+        xt = xt.T
         model = ISINDy()
         extended_data, _ = np.array(model.polynomial_expansion(xt, degree=5, var_names=None))
         theta_k = model.build_theta_matrix(extended_data, dxt.flatten())
