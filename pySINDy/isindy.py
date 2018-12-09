@@ -71,18 +71,6 @@ class ISINDy(SINDyBase):
             self._coef[:, k] = ISINDy.adm_initvary(null_space_k, lmbda, max_iter, tol)
         return self
 
-    def coefficients(self):
-        """
-        :return: coefficients of the system
-        """
-        return self._coef
-
-    def descriptions(self):
-        """
-        :return: descriptions of corresponding coefficients
-        """
-        return self._desp
-
     @staticmethod
     def expand_descriptions(desp, var_name=None):
         """

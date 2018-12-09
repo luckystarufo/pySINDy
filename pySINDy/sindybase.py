@@ -29,6 +29,7 @@ class SINDyBase(object):
         """
         return self._desp
 
+    @property
     def plot_coefficients(self):
         """
         :return: plot of the coefficients
