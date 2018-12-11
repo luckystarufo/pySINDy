@@ -129,7 +129,7 @@ ones:
 1. [SINDy: Van Der Pol Oscillator](examples/example-1-sindy-vanderpol.ipynb)
 2. [SINDyPDE: Burgers Equation](examples/example-2-sindypde-burgers.ipynb)
 3. [SINDyPDE: Reaction Diffusion](examples/example-3-sindypde-reactiondiffusion.ipynb)
-4. [ISINDy example](examples/example-4-isindy-xxx.ipynb)
+4. [ISINDy example](examples/example-4-isindy-subtilis_competence.ipynb)
 
 ### Running the tests
 We are using Travis CI for continuous intergration testing. You can check out the current status 
