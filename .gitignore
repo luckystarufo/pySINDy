@@ -3,8 +3,8 @@
 .idea
 .DS_Store
 *.nc
-*.mat
 *.csv
+*.mat
 .coverage
 __pycache__
 *.tar
