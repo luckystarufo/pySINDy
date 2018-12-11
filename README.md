@@ -12,6 +12,12 @@
         <img src="https://readthedocs.org/projects/pysindy/badge/?version=latest" /></a>
 </p>   
 
+<p align="left">
+    <a href="https://badge.fury.io/py/PySINDy">
+    <img src="https://badge.fury.io/py/PySINDy.svg" alt="PyPI version" height="18">
+  </a>
+</p>   
+
 **pySINDy**: python Sparse Identification of Nonlinear Dynamics
 
 ## Table of contents
