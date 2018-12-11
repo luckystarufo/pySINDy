@@ -11,3 +11,6 @@ __pycache__
 *.tar.gz
 *.zip
 *.egg-info
+dist
+build
+*.whl
