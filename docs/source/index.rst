@@ -27,7 +27,7 @@ Mac and Linux users can install pre-built binary packages using pip.
 To install the package just type:
 ::
 
-    pip install pysindy
+    pip install PySINDy
 
 Installing from source
 ^^^^^^^^^^^^^^^^^^^^^^^^

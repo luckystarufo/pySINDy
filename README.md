@@ -75,7 +75,7 @@ later.
          |- example-1-sindy-vanderpol.ipynb
          |- example-2-sindypde-burgers.ipynb
          |- example-3-sindypde-reactiondiffusion.ipynb
-         |- example-4-isindy-xxx.ipynb
+         |- example-4-isindy-subtilis_competence.ipynb
       |- docs/
          |- Design Doc.pdf
          |- Makefile
@@ -105,7 +105,7 @@ using pip or directly from the source code.
 
 Mac and Linux users can install pre-built binary packages using pip. To install the package just type:
 ```bash
-> pip install pysindy
+> pip install PySINDy
 ```
 
 ### Installing from source

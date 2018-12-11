@@ -1,0 +1,8 @@
+!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+argparse	/Users/liuyuyingufo/Documents/UW_docs/Data_driven_dyn_research/pySINDy/linting.py	/^import argparse$/;"	i	language:Python
+lint	/Users/liuyuyingufo/Documents/UW_docs/Data_driven_dyn_research/pySINDy/linting.py	/^from pylint import lint$/;"	i	language:Python
+re	/Users/liuyuyingufo/Documents/UW_docs/Data_driven_dyn_research/pySINDy/linting.py	/^import re$/;"	i	language:Python
+run	/Users/liuyuyingufo/Documents/UW_docs/Data_driven_dyn_research/pySINDy/linting.py	/^run = lint.Run([sys.argv[1]], do_exit=False)$/;"	v	language:Python
+score	/Users/liuyuyingufo/Documents/UW_docs/Data_driven_dyn_research/pySINDy/linting.py	/^score = run.linter.stats['global_note']$/;"	v	language:Python
+sys	/Users/liuyuyingufo/Documents/UW_docs/Data_driven_dyn_research/pySINDy/linting.py	/^import sys$/;"	i	language:Python
+THRESHOLD	/Users/liuyuyingufo/Documents/UW_docs/Data_driven_dyn_research/pySINDy/linting.py	/^THRESHOLD = 8.5$/;"	v	language:Python

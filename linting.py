@@ -14,9 +14,9 @@ run = lint.Run([sys.argv[1]], do_exit=False)
 score = run.linter.stats['global_note']
 
 if score < THRESHOLD:
-    print("Your code doesn't pass the PEP8 style score threshold: 8.50!")
+    print("Your code doesn't pass the PEP8 style score threshold: %f!" % THRESHOLD)
     sys.exit(1)
 
-print("Congratulations! Your code has passed the PEP8 style score threshold: 8.50!")
+print("Congratulations! Your code has passed the PEP8 style score threshold: %f!" % THRESHOLD)
 
 
