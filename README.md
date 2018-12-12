@@ -12,6 +12,12 @@
         <img src="https://readthedocs.org/projects/pysindy/badge/?version=latest" /></a>
 </p>   
 
+<p align="left">
+    <a href="https://badge.fury.io/py/PySINDy">
+        <img src="https://badge.fury.io/py/PySINDy.svg" alt="PyPI version" height="18">
+  </a>
+</p>   
+
 **pySINDy**: python Sparse Identification of Nonlinear Dynamics
 
 ## Table of contents
@@ -75,7 +81,7 @@ later.
          |- example-1-sindy-vanderpol.ipynb
          |- example-2-sindypde-burgers.ipynb
          |- example-3-sindypde-reactiondiffusion.ipynb
-         |- example-4-isindy-xxx.ipynb
+         |- example-4-isindy-subtilis_competence.ipynb
       |- docs/
          |- Design Doc.pdf
          |- Makefile
@@ -105,7 +111,7 @@ using pip or directly from the source code.
 
 Mac and Linux users can install pre-built binary packages using pip. To install the package just type:
 ```bash
-> pip install pysindy
+> pip install PySINDy
 ```
 
 ### Installing from source
@@ -129,7 +135,7 @@ ones:
 1. [SINDy: Van Der Pol Oscillator](examples/example-1-sindy-vanderpol.ipynb)
 2. [SINDyPDE: Burgers Equation](examples/example-2-sindypde-burgers.ipynb)
 3. [SINDyPDE: Reaction Diffusion](examples/example-3-sindypde-reactiondiffusion.ipynb)
-4. [ISINDy example](examples/example-4-isindy-xxx.ipynb)
+4. [ISINDy example](examples/example-4-isindy-subtilis_competence.ipynb)
 
 ### Running the tests
 We are using Travis CI for continuous intergration testing. You can check out the current status 

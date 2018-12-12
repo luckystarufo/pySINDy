@@ -5,7 +5,7 @@ from os.path import join
 
 # Format expected by setup.py and doc/source/conf.py: string of form "X.Y.Z"
 _version_major = 0
-_version_minor = 1
+_version_minor = 2
 _version_micro = ''  # use '' for first of series, number for 1 and above
 _version_extra = 'dev'
 # _version_extra = ''  # Uncomment this for full releases
@@ -40,11 +40,12 @@ It contains software implementations of SINDy-related algorithms which are used
 continuous integration and deployment, which can be easily adapted
 to use in other projects.
 To get started using these components in your own software, please go to the
-repository README_.
-.. _README: https://github.com/luckystarufo/pySINDy/blob/master/README.md
+repository README https://github.com/luckystarufo/pySINDy/blob/master/README.md
+
+
 License
 =======
-``pySINDy`` is licensed under the terms of the MIT license. See the file
+pySINDy is licensed under the terms of the MIT license. See the file
 "LICENSE" for information on the history of this software, terms & conditions
 for usage, and a DISCLAIMER OF ALL WARRANTIES.
 All trademarks referenced herein are property of their respective holders.

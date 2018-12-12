@@ -27,7 +27,7 @@ Mac and Linux users can install pre-built binary packages using pip.
 To install the package just type:
 ::
 
-    pip install pysindy
+    pip install PySINDy
 
 Installing from source
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -59,9 +59,11 @@ Tutorials
 We made some tutorial examples. Please refer to the official GitHub repository for the last
 updates in the examples folder. Here the list of the exported tutorials:
 
-- Tutorial 1: coming soon ...
-- Tutorial 2: coming soon ...
-- Tutorial 3: coming soon ...
+- Tutorial 1 <a href="https://github.com/luckystarufo/pySINDy/blob/master/examples/example-1-sindy-vanderpol.ipynb">Van der Pol</a>
+- Tutorial 2 <a href="https://github.com/luckystarufo/pySINDy/blob/master/examples/example-2-sindypde-burgers.ipynb">Burgers</a>
+- Tutorial 3 <a href="https://github.com/luckystarufo/pySINDy/blob/master/examples/example-3-sindypde-reactiondiffusion.ipynb">Reaction-Diffusion</a>
+- Tutorial 4 <a href="https://github.com/luckystarufo/pySINDy/blob/master/examples/example-4-isindy-subtilis_competence.ipynb">Biological network</a>
+- more coming soon ...
 
 References
 --------------------
