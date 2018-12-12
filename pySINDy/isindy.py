@@ -29,7 +29,7 @@ class ISINDy(SINDyBase):
             data = data[np.newaxis, ]
 
         if len(data.shape) == 2:
-            _n, len_t = data.shape
+            num_of_var, len_t = data.shape
 
         if len(data.shape) > 2:
             len_t = data.shape[-1]
@@ -37,7 +37,7 @@ class ISINDy(SINDyBase):
             print("The array is converted to 2D automatically: in Implicit-SINDy, "
                   "each dimension except for the time (default the last dimension) "
                   "are treated equally.")
-            _n = data.shape[0]
+            num_of_var = data.shape[0]
 
 
         # compute time derivative
@@ -49,7 +49,7 @@ class ISINDy(SINDyBase):
             x_dot[:, i] = ISINDy.smoothing(x_dot[:, i])
 
         # polynomial expansion of original data
-        var_names = ['u%d' % i for i in np.arange(_n)]
+        var_names = ['u%d' % i for i in np.arange(num_of_var)]
 
         extended_data, extended_desp = np.array(self.polynomial_expansion(data.T,
                                                                           degree=poly_degree,
@@ -60,9 +60,9 @@ class ISINDy(SINDyBase):
 
         # compute sparse coefficients
 
-        self._coef = np.zeros((len(self._desp), _n))
+        self._coef = np.zeros((len(self._desp), num_of_var))
 
-        for k in np.arange(_n):
+        for k in np.arange(num_of_var):
             # formulate theta1, theta2, theta3 ...
             theta_k = self.build_theta_matrix(extended_data, x_dot[:, k])
             # compute null spaces
@@ -100,15 +100,15 @@ class ISINDy(SINDyBase):
         if not isinstance(data, np.ndarray) or data.ndim != 2:
             raise ValueError("input data should be a 2D numpy array!")
 
-        _m, _n = data.shape
+        dim1, dim2 = data.shape
 
         if not isinstance(d_vec, np.ndarray) or d_vec.ndim != 1:
             raise ValueError("input d_vec should be a 1D numpy vector!")
 
-        assert len(d_vec) == _m, "the length of d_vec should be the same as columns in data!"
+        assert len(d_vec) == dim1, "the length of d_vec should be the same as columns in data!"
 
-        extended = np.zeros((_m, _n))
-        for i in np.arange(_n):
+        extended = np.zeros((dim1, dim2))
+        for i in np.arange(dim2):
             extended[:, i] = data[:, i]*d_vec
 
         return np.hstack([data, extended])
@@ -126,10 +126,10 @@ class ISINDy(SINDyBase):
         _q = qinit
         for _ in range(max_iter):
             q_old = _q
-            soft_thresholding = lambda s, d: \
-                np.multiply(np.sign(s), np.maximum(np.absolute(s) - d, 0))
-            _x = soft_thresholding(np.matmul(subspace, _q), lmbda)
-            _q = np.matmul(subspace.T, _x)/(np.linalg.norm(np.matmul(subspace.T, _x), ord=2))
+            soft_thresholding = lambda mat, lower: \
+                np.multiply(np.sign(mat), np.maximum(np.absolute(mat) - lower, 0))
+            _xi = soft_thresholding(np.matmul(subspace, _q), lmbda)
+            _q = np.matmul(subspace.T, _xi)/(np.linalg.norm(np.matmul(subspace.T, _xi), ord=2))
             res_q = np.linalg.norm(q_old - _q, ord=2)
             if res_q <= tol:
                 return _q
@@ -195,10 +195,10 @@ class ISINDy(SINDyBase):
         upper = mean + std
         lower = mean - std
 
-        _m = len(vec)
+        length = len(vec)
         if vec[0] > upper or vec[0] < lower:
             vec[0] = ISINDy.smoothing_helper(vec, 0, upper, lower)
-        for j in range(1, _m):
+        for j in range(1, length):
             left = vec[j - 1]
             if vec[j] > upper or vec[j] < lower:
                 vec[j] = left
