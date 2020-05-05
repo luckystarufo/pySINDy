@@ -18,6 +18,9 @@
   </a>
 </p>   
 
+**NOTICE**: This repository is deprecated. The new (official) version of PySindy is available here: https://github.com/dynamicslab/pysindy.
+
+
 **pySINDy**: python Sparse Identification of Nonlinear Dynamics
 
 ## Table of contents
