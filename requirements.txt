@@ -3,7 +3,7 @@ appnope==0.1.0
 astroid==2.1.0
 atomicwrites==1.2.1
 attrs==18.2.0
-Babel==2.6.0
+Babel==2.9.1
 backcall==0.1.0
 bleach==3.1.4
 certifi==2018.11.29
